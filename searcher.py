@@ -63,10 +63,6 @@ class Searcher:
 			match += name.count(item)
 		return match
 
-	def format_output(self, data):
-		""" Sets output in format: ID name score """
-		return "\n".join('{} {} {}'.format(*entry) for entry in data)
-
 	def get_results(self, query):
 		output = []
 		for book_id, value in self.data.items():
@@ -84,7 +80,7 @@ class Searcher:
 		normalized_query = normalize_string("[., \-!?:()]+", query)
 		search_results = self.get_results(normalized_query)
 		sorted_results = self.sort_results(search_results)
-		return self.format_output(sorted_results)
+		return sorted_results
 
 	def sort_results(self, results):
 		""" Sorts results by score from highest to lowest """
@@ -113,16 +109,16 @@ class InvertedSolution(Searcher):
 			output.append((book_id, name, match_rate))
 
 		sorted_results = self.sort_results(output)
-		return self.format_output(sorted_results)
+		return sorted_results
 
 if __name__ == "__main__":
 	print ("Invoking testing procedure")
 	s = Searcher("test.tsv")
 	si = InvertedSolution("test.tsv")
-	assert s.search("Julia").split()[-1] == '2', "there should be 2 mentions of word Julia"
+	assert s.search("Julia")[0][-1] == 2, "there should be 2 mentions of word Julia"
 	assert s.search("Julia") == si.search("Julia"), "original and inverted search should match here!"
 	assert s.search("Kitchen") == s.search("KITCHEN") == s.search("kItChen"), "Case should not affect search"
-	assert "The All-American Cowboy Cookbook" in s.search("300 recipes from").split("\n")[0], "Cowboy Cookbook should be top result"
+	assert "The All-American Cowboy Cookbook" in s.search("300 recipes from")[0][1], "Cowboy Cookbook should be top result"
 	from time import time
 	simple_start_time = time()
 	s.search("Swap BoTTle!")
