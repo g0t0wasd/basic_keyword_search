@@ -1,0 +1,183 @@
+body {
+	background-color: #333;
+}
+
+.wrapper {
+	margin: auto 300px;
+}
+
+.header {
+	height: 200px;
+}
+
+.main {
+	height: 1200px;
+	background-color: #fff;
+}
+
+.footer {
+	height: 40px;
+}
+
+.footer > div {
+	text-align: justify;
+	color: #fff;
+	margin: auto;
+	width: 300px;
+	line-height: 2;
+}
+
+.logo {
+	float: left;
+	color: #36c6d3;
+	margin-top: 75px;
+	margin-left: 70px;
+}
+
+.menu {
+	margin-top: 60px;
+	margin-right: 70px;
+	float: right;
+	width: 500px;
+	height: 50px;
+}
+.pag_item {
+	width: 50px;
+	height: 30px;
+	line-height: 2;
+	background-color: #f3f4f6;
+}
+
+.menu_item {
+	width: 100px;
+	height: 50px;
+	line-height: 3;
+}
+
+.menu_item,  .pag_item{
+	float: left;
+	text-align: center;
+	display: inline-block;
+}
+
+.menu_item:hover, .pg-normal:hover{
+	background-color: #36c6d3;
+}
+
+.menu_item a:hover {
+	color: #fff;
+}
+
+a {
+	color: #b4bcc8;
+	display: block;
+}
+
+.search_input {
+}
+
+input[type=text] {
+	width: 70%;
+	padding: 12px 20px;
+	margin: 20px 20px;
+	box-sizing: border-box;
+	border: #333 3px solid;
+	font-size: 20px;
+	background-color: #b4bcc8;
+	height: 55px;
+
+}
+
+input[type=text]:focus {
+	background-color: #36c6d3;
+	color:#fff;
+}
+
+button {
+	width: 25%;
+	border: none;
+	background-color: #36c6d3;
+	color:#fff;
+	height: 55px;
+	font-size: 20px;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+table {
+	width: 97%;
+	border-collapse: collapse;
+	margin: auto;
+}
+
+tr.book_row:hover {
+	background-color: #f3f4f6;
+}
+
+td, th {
+	padding: 10px;
+}
+
+table, td, th {
+	border: 1px solid #e7ecf1;
+}
+
+#paging {
+	text-align: center;
+	margin-top: 20px;
+}
+
+#paging>*:hover, .close:hover, .book_id_column:hover {
+	cursor: pointer;
+}
+
+.pg-normal {
+
+}
+
+strike {
+	color: red;
+}
+
+span {
+	color: green;
+}
+
+.pg-selected {
+	background-color: #333;
+	color: white;
+}
+
+/* Modal window */
+
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 30%;
+	top: 10%;
+	width: 700px;
+	height: 220px;
+	background-color: #22c1dbe6;
+	color: white;
+}
+
+.modal_content {
+	float: left;
+	margin: 10px 15px;
+}
+
+.close {
+	color: white;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+#messages {
+	margin-left: 25px;
+	margin-bottom: 10px;
+}

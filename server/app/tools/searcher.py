@@ -14,7 +14,9 @@ class DataLoader:
 	def load_data(self):
 		""" Loads data from file. Automatically checks delimiter type """
 		with open(self.file) as data_f:
-			dialect = csv.Sniffer().sniff(data_f.read(1024))
+			items_to_sniff = data_f.read(1024)
+			data_f.seek(0)
+			dialect = csv.Sniffer().sniff(items_to_sniff)
 			data_reader = csv.reader(data_f, dialect)
 			self.data = tuple(data_reader)
 
@@ -26,15 +28,16 @@ class DataLoader:
 		""" Returns Book ID, book name, normalized book name """
 		book_id = entry[0]
 		original_name = entry[1]
+		category = entry[2]
 		normalized_name = normalize_string("[., \-!?:()]+", entry[1])
-		return book_id, original_name, normalized_name
+		return book_id, original_name, normalized_name, category
 
 	def normalize_data(self):
 		""" Sets data as a dict with ID as a key and tuple (name, normalized name) as value """
 		self.normalized_data = {}
 		for entry in self.data:
-			book_id, original_name, normalized_name = self.get_id_name_norm(entry)
-			self.normalized_data[book_id] = (original_name, normalized_name)
+			book_id, original_name, normalized_name, category = self.get_id_name_norm(entry)
+			self.normalized_data[book_id] = (original_name, normalized_name, category)
 
 	def get_inverted_data(self):
 		self.invert_data()
@@ -44,34 +47,41 @@ class DataLoader:
 		""" Creates a dict with word as a key and book ids as values """
 		self.inverted_data = {}
 		for entry in self.data:
-			book_id, original_name, normalized_name = self.get_id_name_norm(entry)
+			book_id, original_name, normalized_name, category = self.get_id_name_norm(entry)
 			for word in normalized_name:
 				if word not in self.inverted_data:
 					self.inverted_data[word] = [book_id]
 				else:
 					self.inverted_data[word].append(book_id)
 
+class Ranker:
+	def get_score(self, query, title):
+		intersection = set(query).intersection(set(title))
+		match_rate = len(intersection)
+		return match_rate
+
+	def match_not_match(self, query, title):
+		matched = set(query).intersection(title)
+		missed = set(query).difference(title)
+		return tuple(matched), tuple(missed)
+
+
 class Searcher:
 	def __init__(self, file_name):
 		data_loader = DataLoader(file_name)
 		self.data = data_loader.get_normalized_data()
 
-	def calculate_exact_match(self, query, name):
-		""" Calculates number of repetitions of words from query in name """
-		match = 0
-		for item in query:
-			match += name.count(item)
-		return match
+	def get_data(self):
+		return self.data
 
 	def get_results(self, query):
 		output = []
+		ranker = Ranker() 
 		for book_id, value in self.data.items():
 			name = value[0]
 			normalized_name = value[1]
-			intersection = set(query).intersection(set(normalized_name))
-			match_rate = len(intersection)
+			match_rate = ranker.get_score(query, normalized_name)
 			if match_rate:
-				match_rate = self.calculate_exact_match(query, normalized_name)
 				output.append((book_id, name, match_rate))
 		return output
 
@@ -95,6 +105,7 @@ class InvertedSolution(Searcher):
 
 	def search(self, query):
 		book_ids = []
+		ranker = Ranker()
 		normalized_query = normalize_string("[., \-!?:()]+", query)
 		for word in normalized_query:
 			if word in self.inverted_data.keys():
@@ -105,8 +116,9 @@ class InvertedSolution(Searcher):
 		for book_id in book_ids:
 			name = self.data[book_id][0]
 			normalized_name = self.data[book_id][1]
-			match_rate = self.calculate_exact_match(normalized_query, normalized_name)
-			output.append((book_id, name, match_rate))
+			match_rate = ranker.get_score(normalized_query, normalized_name)
+			matched, missed = ranker.match_not_match(normalized_query, normalized_name)
+			output.append((book_id, name, match_rate, matched, missed))
 
 		sorted_results = self.sort_results(output)
 		return sorted_results

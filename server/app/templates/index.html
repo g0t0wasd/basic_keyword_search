@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }} keyword</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/reset.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="modal" class="modal">
+	<div class="modal_content"><h2>Additional Info</h2></div>
+		<span class="close">&times;</span>
+		<table>
+			<tr><td><b>Book ID</b></td><td id="book_id"></td></tr>
+			<tr><td><b>Title</b></td><td id="book_title"></td></tr>
+			<tr><td><b>Category</b></td><td id="book_category"></td></tr>
+		</table>
+</div>
+<div class="wrapper">
+	<div class="header">
+		<div class="logo">
+			<h2>MYSUPERLOGO</h2>
+		</div>
+		<div class="menu">
+			<ul class="main_nav">
+				<li class="menu_item"><a href="#">Home</a></li>
+				<li class="menu_item"><a href="#">Main</a></li>
+				<li class="menu_item"><a href="#">Services</a></li>
+				<li class="menu_item"><a href="#">Docs</a></li>
+				<li class="menu_item"><a href="#">Contacts</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="main">
+		<div class="search_input">
+			<input type="text" name="" placeholder="I'm looking for..." id="text_input"><button class="search_button" id="search_button">Search</button>
+		</div>
+		<div>
+		<div id="messages"></div>
+		<table id="results" border="1">
+			
+		</table>
+		<div id="paging"></div>
+		</div>
+	</div>
+	<div class="footer">
+		<div>Footer Inc. All rights reserved 2017.</div>
+	</div>
+</div>
+
+<script src="{{ url_for('static', filename='js/paging.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
